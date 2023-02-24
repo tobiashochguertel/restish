@@ -33,6 +33,7 @@ type TLSConfig struct {
 // APIProfile contains account-specific API information
 type APIProfile struct {
 	Base    string            `json:"base,omitempty" yaml:"base,omitempty"`
+	OpenApi string            `json:"openapi,omitempty" yaml:"openapi,omitempty"`
 	Headers map[string]string `json:"headers,omitempty" yaml:"headers,omitempty"`
 	Query   map[string]string `json:"query,omitempty" yaml:"query,omitempty"`
 	Auth    *APIAuth          `json:"auth,omitempty" yaml:"auth,omitempty"`
@@ -43,6 +44,7 @@ type APIProfile struct {
 type APIConfig struct {
 	name      string
 	Base      string                 `json:"base" yaml:"base"`
+	OpenApi   string                 `json:"openapi" yaml:"openapi"`
 	SpecFiles []string               `json:"spec_files,omitempty" yaml:"spec_files,omitempty" mapstructure:"spec_files,omitempty"`
 	Profiles  map[string]*APIProfile `json:"profiles,omitempty" yaml:"profiles,omitempty" mapstructure:",omitempty"`
 	TLS       *TLSConfig             `json:"tls,omitempty" yaml:"tls,omitempty" mapstructure:",omitempty"`
@@ -179,7 +181,7 @@ func initAPIConfig() {
 		Args:  cobra.ExactArgs(1),
 		Run: func(cmd *cobra.Command, args []string) {
 			viper.Set("rsh-no-cache", true)
-			_, err := Load(fixAddress(args[0]), Root)
+			_, err := Load(fixAddressOpenApiSync(args[0]), Root)
 			if err != nil {
 				panic(err)
 			}

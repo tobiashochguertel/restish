@@ -68,6 +68,44 @@ func fixAddress(addr string) string {
 	return addr
 }
 
+// fixAddressOpenApiSync can convert `:8000` or `example.com` to a full URL.
+func fixAddressOpenApiSync(addr string) string {
+	if strings.HasPrefix(addr, ":") {
+		addr = "http://localhost" + addr
+	}
+
+	if !strings.HasPrefix(addr, "http://") && !strings.HasPrefix(addr, "https://") {
+		// Does the first part match a known API? If so, replace it with
+		// the base URL for that API.
+		parts := strings.Split(addr, "/")
+		c := configs[parts[0]]
+		if c != nil {
+			p := c.Profiles[viper.GetString("rsh-profile")]
+			if p == nil {
+				if viper.GetString("rsh-profile") != "default" {
+					panic("invalid profile " + viper.GetString("rsh-profile"))
+				}
+			}
+			if p != nil && p.OpenApi != "" {
+				parts[0] = p.OpenApi
+				return strings.Join(parts, "/")
+			} else if c.OpenApi != "" {
+				parts[0] = c.OpenApi
+				return strings.Join(parts, "/")
+			}
+		}
+
+		// Local traffic defaults to HTTP, everything else uses TLS.
+		if strings.Contains(addr, "localhost") {
+			addr = "http://" + addr
+		} else {
+			addr = "https://" + addr
+		}
+	}
+
+	return addr
+}
+
 type requestOption struct {
 	client       *http.Client
 	disableLog   bool

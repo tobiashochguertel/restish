@@ -259,8 +259,9 @@ func TestAPISync(t *testing.T) {
 	reset(false)
 
 	configs["sync-test"] = &APIConfig{
-		name: "sync-test",
-		Base: "https://sync-test.example.com",
+		name:    "sync-test",
+		Base:    "https://127.0.0.1",
+		OpenApi: "https://sync-test.example.com",
 		Profiles: map[string]*APIProfile{
 			"default": {},
 		},
