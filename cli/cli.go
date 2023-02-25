@@ -767,15 +767,15 @@ func Run() (returnErr error) {
 				currentConfig = cfg
 				for _, cmd := range Root.Commands() {
 					if cmd.Use == apiName {
-						currentBase := cfg.Base
+						currentBase := cfg.OpenApi
 						currentProfile := cfg.Profiles[profile]
 						if currentProfile == nil {
 							if profile != "default" {
 								panic("invalid profile " + profile)
 							}
 						}
-						if currentProfile != nil && currentProfile.Base != "" {
-							currentBase = currentProfile.Base
+						if currentProfile != nil && currentProfile.OpenApi != "" {
+							currentBase = currentProfile.OpenApi
 						}
 						if _, err := Load(currentBase, cmd); err != nil {
 							panic(err)
