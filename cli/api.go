@@ -114,10 +114,6 @@ func Load(entrypoint string, root *cobra.Command) (API, error) {
 	}()
 	uris := []string{}
 
-	/*	if !strings.HasSuffix(entrypoint, "/") {
-		entrypoint += "/"
-	}*/
-
 	uri, err := url.Parse(entrypoint)
 	if err != nil {
 		return API{}, err
