@@ -225,12 +225,6 @@ func Load(entrypoint string, root *cobra.Command) (API, error) {
 		uris = append(uris, l.URI)
 	}
 
-	// Try hints from loaders next. These are likely places for API descriptions
-	// to be on the server, like e.g. `/openapi.json`.
-	for _, l := range loaders {
-		uris = append(uris, l.LocationHints()...)
-	}
-
 	uris = append(uris, uri.String())
 
 	for _, checkURI := range uris {
